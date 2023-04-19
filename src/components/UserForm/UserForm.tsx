@@ -77,63 +77,26 @@ const UserForm = (props: any) => {
     }
 
     const CheckFormData = () => {
-        var flag = true;
-        var ErrorReason = "";
+        const { first, last, title } = user.name;
+        const { email } = user;
+        const existingUser = props.reduxusers.find((u :any) => u.email === email && u.login.uuid !== user.login.uuid);
 
-        if (((user.name.first === undefined) || (user.name.first === ""))) {
-            ErrorReason += "Missing field: first name,"
-            flag = false;
-        }
-        if (user.name.first.length < 3) {
-            ErrorReason += "first name - min of 3 characters,"
-            flag = false;
-        }
+        const errors = [];
+        if (!first) errors.push("Missing field: first name");
+        if (first && first.length < 3) errors.push("first name - min of 3 characters");
+        if (!last) errors.push("Missing field: last name");
+        if (last && last.length < 3) errors.push("last name - min of 3 characters");
+        if (!title) errors.push("Missing field: title");
+        if (!email) errors.push("Missing field: email");
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push("Email is not valid");
+        if (existingUser) errors.push("Email already in use");
 
-        if (((user.name.last === undefined) || (user.name.last === ""))) {
-            ErrorReason += "Missing field: last name,"
-            flag = false;
-        }
-        if (user.name.last.length < 3) {
-            ErrorReason += "last name - min of 3 characters,"
-            flag = false;
-        }
-
-        if (((user.name.title === undefined) || (user.name.title === ""))) {
-            ErrorReason += "Missing field: title,"
-            flag = false;
-        }
-
-        if (((user.email === undefined) || (user.email === ""))) {
-            ErrorReason += "Missing field: email,"
-            flag = false;
-        }
-
-        let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (pattern.test(user.email) === false) {
-            ErrorReason += "Email is not Valid"
-            flag = false;
-        }
-
-        for (let i = 0; i < props.reduxusers.length; i++) {
-            if (user.email === props.reduxusers[i].email && user.login.uuid !== props.reduxusers[i].login.uuid) {
-                ErrorReason += "Email already in use"
-                flag = false;
-            }
-        }
-
-        //need to check unique mail..
-
-        if (flag === true) {
-            if (props.userid !== undefined) {
-                UpdateUser();
-            }
-            else {
-                CreateUser();
-            }
+        if (errors.length === 0) {
+            props.userid !== undefined ? UpdateUser() : CreateUser();
         } else {
-            toast.error(ErrorReason);
+            toast.error(errors.join(", "));
         }
-    }
+    };
 
     async function CreateUser() {
         let tempreduxusers = [...props.reduxusers];
@@ -141,6 +104,7 @@ const UserForm = (props: any) => {
         tempuser.login.uuid = generate();
         tempreduxusers.push(tempuser);
         dispatch(updateUsersDataFunc(tempreduxusers))
+        toast.success('User created');
         props.ToggleForModal();
     }
 
@@ -177,7 +141,6 @@ const UserForm = (props: any) => {
 
     return (
         <Modal
-            style={{ minHeight: '80%', maxHeight: '80%', minWidth: '80%', maxWidth: '80%' }}
             isOpen={props.isOpen}
             centered
             scrollable
@@ -186,7 +149,7 @@ const UserForm = (props: any) => {
             <ModalBody>
                 <Card>
                     <CardHeader>
-                        <CardTitle tag="h4" style={{ textAlign: 'center', fontWeight: "bold" }}></CardTitle>
+                        <CardTitle tag="h4"></CardTitle>
                     </CardHeader>
                     <CardBody>
                         {user ?
@@ -203,11 +166,11 @@ const UserForm = (props: any) => {
                                 {props.userid ?
                                     <>
                                         <h6>Country</h6>
-                                        <Input placeholder="Country" value={user.location.country} onChange={handleChange_email} disabled />
+                                        <Input placeholder="Country" value={user.location.country} disabled />
                                         <h6>City</h6>
-                                        <Input placeholder="City" value={user.location.city} onChange={handleChange_email} disabled />
+                                        <Input placeholder="City" value={user.location.city} disabled />
                                         <h6>Street</h6>
-                                        <Input placeholder="Street" value={user.location.street.name} onChange={handleChange_email} disabled />
+                                        <Input placeholder="Street" value={user.location.street.name} disabled />
                                     </> :
                                     <>
                                         <h6>Country</h6>

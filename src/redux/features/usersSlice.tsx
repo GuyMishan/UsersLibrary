@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // Define a type for the slice state
 interface UserState {
-  value: []
+  value: any[];
 }
 
 // Define the initial state using that type
@@ -16,10 +16,10 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    getUsersData: (state, action) => {
+    getUsersData: (state, action: PayloadAction<any[]>) => {
       state.value = action.payload;
     },
-    updateUsersData: (state, action) => {
+    updateUsersData: (state, action: PayloadAction<any[]>) => {
       state.value = action.payload;
     },
     clearUsersData: (state) => {
@@ -28,21 +28,19 @@ export const userSlice = createSlice({
   }
 })
 
-export const getUsersDataFunc = () => async (dispatch: (arg0: { payload: any; type: "user/getUsersData" }) => void) => {
-  await axios.get(`https://randomuser.me/api/?results=10`)
-    .then((response: { data: any }) => {
-      dispatch(getUsersData(response.data.results));
-    })
-    .catch((error: any) => {
-      console.log(error);
-    })
+export const getUsersDataFunc = () => async (dispatch: (arg0: PayloadAction<any[]>) => void) => {
+  try {
+    const response = await axios.get(`https://randomuser.me/api/?results=10`);
+    dispatch(getUsersData(response.data.results));
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export const updateUsersDataFunc = (tempusers: any) => async (dispatch: (arg0: { payload: any; type: "user/getUsersData" }) => void) => {
-  dispatch(getUsersData(tempusers));
+export const updateUsersDataFunc = (tempusers: any[]) => (dispatch: (arg0: PayloadAction<any[]>) => void) => {
+  dispatch(updateUsersData(tempusers));
 };
 
-export const { getUsersData, clearUsersData, updateUsersData } = userSlice.actions
+export const { getUsersData, clearUsersData, updateUsersData } = userSlice.actions;
 
-
-export default userSlice.reducer
+export default userSlice.reducer;

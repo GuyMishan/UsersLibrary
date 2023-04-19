@@ -1,0 +1,41 @@
+.user-card-row {
+    padding-top: 10px;
+  }
+  
+  .user-card {
+    box-shadow: rgba(123, 123, 123, 0.05) 0px 2px 5px 5px;
+  }
+  
+  .user-card-body-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .user-card-col {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-card-profile-pic {
+    width: 45px;
+    margin-right: 15px;
+  }
+  
+  .user-card-email {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .user-card-location {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  .user-card-edit-delete-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

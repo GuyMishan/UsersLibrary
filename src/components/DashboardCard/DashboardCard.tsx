@@ -1,44 +1,63 @@
-import { Card, Row, Col, CardBody, Button } from 'reactstrap';
+import './DashboardCard.css';
+import { Row, Card, CardBody, Col, Button } from 'reactstrap';
 
-function DashboardCard(props: any) {
-
+const DashboardCard = (props: any) => {
     return (
-        <Row style={{ paddingTop: '10px' }}>
-            <Card style={{ boxShadow: 'rgb(123 123 123 / 5%) 0px 2px 5px 5px' }}>
+        <Row className="user-card-row">
+            <Card className="user-card">
                 <CardBody>
-                    <Row>
-                        <Col xs={12} md={1} lg={1} style={{ display: 'flex', alignItems: 'center' }}>
-                            {props.user.picture ? <img src={props.user.picture.medium} alt='profilepic' style={{ width: '45px' }} /> : null}
+                    <Row className="user-card-body-row">
+                        <Col xs={12} md={3} lg={3} className="user-card-col">
+                            {props.user.picture ? (
+                                <img
+                                    src={props.user.picture.medium}
+                                    alt="profilepic"
+                                    className="user-card-profile-pic"
+                                />
+                            ) : null}
+                            <h6 style={{ margin: '0px' }}>
+                                {props.user.name.title} {props.user.name.first} {props.user.name.last}
+                            </h6>
                         </Col>
-                        <Col xs={12} md={2} lg={2} style={{ display: 'flex', alignItems: 'center' }}>
-                            <h6 style={{ margin: '0px' }}>{props.user.name.title} {props.user.name.first} {props.user.name.last}</h6>
-                        </Col>
-                        <Col xs={12} md={4} lg={3} style={{ display: 'flex', alignItems: 'center', wordWrap: 'break-word', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                        <Col xs={12} md={3} lg={3} className="user-card-col user-card-email">
                             {props.user.email}
                         </Col>
-                        <Col xs={12} md={2} lg={2} style={{ display: 'flex', alignItems: 'center' }}>
-                            {props.user.location ?
+                        <Col xs={12} md={2} lg={2} className="user-card-col user-card-location">
+                            {props.user.location ? (
                                 <>
                                     {props.user.location.country}
-                                    <br></br>
+                                    <br />
                                     {props.user.location.city}
-                                    <br></br>
+                                    <br />
                                     {props.user.location.street.name}
                                 </>
-                                : null}
+                            ) : null}
                         </Col>
-                        <Col xs={12} md={1} lg={2} style={{ display: 'flex', alignItems: 'center' }}>
+                        <Col xs={12} md={2} lg={2} className="user-card-col user-card-login">
                             {props.user.login ? props.user.login.uuid : null}
                         </Col>
-                        <Col xs={12} md={2} lg={2} style={{ display: 'flex', alignItems: 'center',justifyContent:'center' }}>
-                            <Button style={{marginRight:'10px'}} color='primary' value={props.user.login.uuid} onClick={props.Toggle}>edit</Button>
-                            <Button color='danger' value={props.user.login.uuid} onClick={props.ToggleDelete}>delete</Button>
+                        <Col xs={12} md={2} lg={2} className="user-card-col user-card-edit-delete-col">
+                            <Button
+                                style={{ marginRight: '10px' }}
+                                color="primary"
+                                value={props.user.login.uuid}
+                                onClick={props.Toggle}
+                            >
+                                edit
+                            </Button>
+                            <Button
+                                color="danger"
+                                value={props.user.login.uuid}
+                                onClick={props.ToggleDelete}
+                            >
+                                delete
+                            </Button>
                         </Col>
                     </Row>
                 </CardBody>
             </Card>
         </Row>
     );
-}
+};
 
 export default DashboardCard;
